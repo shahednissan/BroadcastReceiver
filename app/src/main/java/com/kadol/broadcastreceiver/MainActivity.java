@@ -2,6 +2,8 @@ package com.kadol.broadcastreceiver;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -11,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +54,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void readSms() {
 
+        Cursor cursor=getContentResolver().query(Uri.parse("content://sms/inbox"),null,null,null,null);
 
+        if(cursor.moveToFirst()){
+            do{
+                String msg;
+                String phoneNumber=cursor.getString(2);
 
+                if(phoneNumber.equals("FlexiLoad")){
+
+                    String body=cursor.getString(12);
+                    String date=getTimeFormatDone(cursor.getLong(4));
+
+                    msg=phoneNumber+": "+body+" "+date;
+                }
+
+            }while(cursor.moveToNext());
+        }
+
+    }
+
+    private String getTimeFormatDone(long time) {
+
+        Date date = new Date(time);
+
+        java.text.SimpleDateFormat dateFormat=new java.text.SimpleDateFormat("MMM d, h:mm:ss a");
+        return dateFormat.format(date);
     }
 }
