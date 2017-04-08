@@ -12,8 +12,12 @@ import android.util.Log;
  */
 
 public class MyPhoneReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        Log.v("Watch for me: ","I am here");
+
         Bundle extras=intent.getExtras();
         if(extras!=null){
             String state=extras.getString(TelephonyManager.EXTRA_STATE);
