@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -13,8 +12,6 @@ import android.util.Log;
  */
 
 public class MyMessageReceiver extends BroadcastReceiver {
-
-    final SmsManager sms=SmsManager.getDefault();
 
     @Override
     public void onReceive(Context context, Intent intent) {

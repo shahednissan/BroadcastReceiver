@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView=(ListView) findViewById(R.id.list);
 
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_expandable_list_item_1,arrayList);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,arrayList);
         listView.setAdapter(adapter);
     }
 
@@ -67,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                     String date=getTimeFormatDone(cursor.getLong(4));
 
                     msg=phoneNumber+": "+body+" "+date;
+                    Log.v("Watch for me: ",msg);
+                    arrayList.add(date);
                 }
 
             }while(cursor.moveToNext());
