@@ -7,11 +7,17 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created by Nafi on 4/8/2017.
  */
 
 public class MyPhoneReceiver extends BroadcastReceiver {
+
+    MyPhoneReceiver(ArrayList<String> arrayList){
+
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
