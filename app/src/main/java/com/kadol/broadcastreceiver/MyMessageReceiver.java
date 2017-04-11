@@ -31,6 +31,10 @@ public class MyMessageReceiver extends BroadcastReceiver {
                 String msg=phoneNumber+": "+message;
 
                 Log.v("watch for me: ",msg);
+
+                Intent intent1 = new Intent(context, MainActivity.class);
+                intent1.putExtra("msgContent", msg);
+                context.startActivity(intent1);
             }
         }
 

@@ -40,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,arrayList);
         listView.setAdapter(adapter);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String messageContent = extras.getString("msgContent");
+            arrayList.add(0,messageContent);
+        }
     }
 
     @Override
@@ -62,14 +68,14 @@ public class MainActivity extends AppCompatActivity {
                 String msg;
                 String phoneNumber=cursor.getString(2);
 
-                if(phoneNumber.equals("FlexiLoad")){
+                if(phoneNumber.equals("123456")){
 
                     String body=cursor.getString(12);
                     String date=getTimeFormatDone(cursor.getLong(4));
 
                     msg=phoneNumber+": "+body+" "+date;
                     Log.v("Watch for me: ",msg);
-                    arrayList.add(date);
+                    arrayList.add(msg);
                 }
 
             }while(cursor.moveToNext());
