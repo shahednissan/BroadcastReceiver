@@ -10,13 +10,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
+
+    DatabaseHelper databaseHelper;
+
+    MessageAdapter adapter;
 
     private static String READ_PHONE_STATE= Manifest.permission.READ_PHONE_STATE;
 
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        databaseHelper=new DatabaseHelper(this);
+
         if(ContextCompat.checkSelfPermission(getApplicationContext(),READ_PHONE_STATE)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{READ_PHONE_STATE,RECEIVE_SMS},123);
         }else {
@@ -36,15 +41,10 @@ public class MainActivity extends AppCompatActivity {
             readSms();
         }
 
-        ListView listView=(ListView) findViewById(R.id.list);
-
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,arrayList);
-        listView.setAdapter(adapter);
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String messageContent = extras.getString("msgContent");
-            arrayList.add(0,messageContent);
+            databaseHelper.insert(messageContent);
         }
     }
 
@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void readSms() {
 
+        databaseHelper.onDelete();
+
         Cursor cursor=getContentResolver().query(Uri.parse("content://sms/inbox"),null,null,null,null);
 
         if(cursor.moveToFirst()){
@@ -68,19 +70,35 @@ public class MainActivity extends AppCompatActivity {
                 String msg;
                 String phoneNumber=cursor.getString(2);
 
-                if(phoneNumber.equals("123456")){
+//                if(phoneNumber.equals("123456")){
 
                     String body=cursor.getString(12);
                     String date=getTimeFormatDone(cursor.getLong(4));
 
                     msg=phoneNumber+": "+body+" "+date;
                     Log.v("Watch for me: ",msg);
-                    arrayList.add(msg);
-                }
+                    databaseHelper.insert(msg);
+                    //arrayList.add(msg);
+//                }
 
             }while(cursor.moveToNext());
         }
 
+        cursor.close();
+        populateListView();
+
+    }
+
+    public void populateListView(){
+
+        arrayList=databaseHelper.sendData();
+
+        ListView listView=(ListView) findViewById(R.id.list);
+
+        adapter=new MessageAdapter(this,arrayList);
+
+//        ArrayAdapter<String> adapter=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,arrayList);
+        listView.setAdapter(adapter);
     }
 
     private String getTimeFormatDone(long time) {

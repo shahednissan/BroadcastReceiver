@@ -35,6 +35,8 @@ public class MyMessageReceiver extends BroadcastReceiver {
                 Intent intent1 = new Intent(context, MainActivity.class);
                 intent1.putExtra("msgContent", msg);
                 context.startActivity(intent1);
+
+
             }
         }
 
